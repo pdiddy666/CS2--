@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Заметки</title>
+
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    padding-top: 60px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .container {
+    background: #fff;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+    margin: 0 0 15px;
+    text-align: center;
+    color: #333;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+
+  button {
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #5a6fdc;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    background: #f5f6fa;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  li button {
+    background: #ff5c5c;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  li button:hover {
+    background: #e14b4b;
+  }
+  .container {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  height: 520px;              /* ВАЖНО */
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  overflow-y: auto;           /* скролл */
+  flex: 1;                    /* занимает оставшееся место */
+}
+
+
+</style>
+
+
+
+
+</head>
+
+
+<body>
+  <div class="container">
+    <h2>Заметки</h2>
+
+    <div class="input-group">
+      <input type="text" id="noteInput" placeholder="Введите заметку">
+      <button onclick="addNote()">Добавить</button>
+    </div>
+
+    <ul id="notesList"></ul>
+  </div>
+
+<script>
+  const input = document.getElementById('noteInput');
+  const list = document.getElementById('notesList');
+
+  let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+  function renderNotes() {
+    list.innerHTML = '';
+    notes.forEach((text, index) => {
+      const li = document.createElement('li');
+      li.textContent = text;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Удалить';
+      deleteBtn.onclick = () => {
+        notes.splice(index, 1);
+        saveNotes();
+        renderNotes();
+      };
+
+      li.appendChild(deleteBtn);
+      list.appendChild(li);
+    });
+  }
+
+  function saveNotes() {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }
+
+  function addNote() {
+    const text = input.value.trim();
+    if (text === '') return;
+
+    notes.push(text);
+    saveNotes();
+    renderNotes();
+
+    input.value = '';
+  }
+
+  renderNotes();
+</script>
+
+</body>
+
+
+</html>
